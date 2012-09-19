@@ -1,9 +1,9 @@
-*~
 *
 !/js/*
 !/skin/*
 !/app/code/local/Oggetto/Blog*
 !/app/design/adminhtml/default/default*
 !/app/design/frontend/default/default*
+!/app/etc/modules
 !.gitignore
 
