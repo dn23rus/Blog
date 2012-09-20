@@ -36,6 +36,7 @@ class Oggetto_Blog_Model_Attribute_Source_Status extends Mage_Eav_Model_Entity_A
 
     const DISABLED  = 0;
     const ENABLED   = 1;
+    const HIDDEN    = 2;
 
     /**
      * Retrieve All options
@@ -50,9 +51,13 @@ class Oggetto_Blog_Model_Attribute_Source_Status extends Mage_Eav_Model_Entity_A
                 'value' => self::DISABLED,
             ),
             array(
-                'lable' => Mage::helpe('oggetto_blog')->__('Enabled'),
+                'lable' => Mage::helper('oggetto_blog')->__('Enabled'),
                 'value' => self::ENABLED,
-            )
+            ),
+            array(
+                'label' => Mage::helper('oggetto_blog')->__('Hidden'),
+                'value' => self::HIDDEN,
+            ),
         );
     }
 }
