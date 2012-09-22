@@ -1,9 +1,7 @@
 *
 !/js/*
 !/skin/*
-!/app/code/local/Oggetto/Blog*
-!/app/design/adminhtml/default/default*
-!/app/design/frontend/default/default*
+!/app/code/local/Oggetto/
+!/app/design/adminhtml/
+!/app/design/frontend/
 !/app/etc/modules
-!.gitignore
-
