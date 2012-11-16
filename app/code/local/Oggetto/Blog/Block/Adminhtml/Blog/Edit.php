@@ -42,7 +42,7 @@ class Oggetto_Blog_Block_Adminhtml_Blog_Edit extends Mage_Adminhtml_Block_Widget
     protected function _construct()
     {
         parent::_construct();
-        $this->_objectId = ' entity_id';
+        $this->_objectId   = 'entity_id';
         $this->_blockGroup = 'oggetto_blog';
         $this->_controller = 'adminhtml_blog';
     }
@@ -54,10 +54,9 @@ class Oggetto_Blog_Block_Adminhtml_Blog_Edit extends Mage_Adminhtml_Block_Widget
      */
     public function getHeaderText()
     {
-        if (Mage::registry('oggetto_blog_post') && Mage::registry('oggetto_blog_post')->getId()) {
-            return Mage::helper('oggetto_blog')->__("Edit post '%s'", Mage::registry('oggetto_blog_post')->getTitle());
-        } else {
-            return Mage::helper('oggetto_blog')->__('Add new post');
-        }
+        $post = Mage::registry(Oggetto_Blog_Model_Post::REGISTRY_KEY);
+        return ($post && $post->getId()) ?
+            Mage::helper('oggetto_blog')->__("Edit post '%s'", $post->getTitle()):
+            Mage::helper('oggetto_blog')->__('Add new post');
     }
 }

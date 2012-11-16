@@ -47,26 +47,14 @@ class Oggetto_Blog_Block_Adminhtml_Blog_Edit_Tab_Category
     }
 
     /**
-     * Retrieves post object
-     *
-     * @return \Oggetto_Blog_Model_Post
-     */
-    public function getPost()
-    {
-        return Mage::registry('current_oggetto_blog_post');
-    }
-
-    /**
      * Retrieves post category ids
      *
      * @return array
      */
     public function getCategoryIds()
     {
-        if ($this->getPost() && $this->getPost()->getId()) {
-            return $this->getPost()->getCategoryIds();
-        }
-        return array();
+        $post = Mage::registry(Oggetto_Blog_Model_Post::REGISTRY_KEY);
+        return ($post && $post->getId()) ? $post->getCategoryIds() : array();
     }
 
     /**

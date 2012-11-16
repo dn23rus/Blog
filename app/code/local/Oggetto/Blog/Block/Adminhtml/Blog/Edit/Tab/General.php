@@ -41,7 +41,6 @@ class Oggetto_Blog_Block_Adminhtml_Blog_Edit_Tab_General extends Mage_Adminhtml_
      */
     protected function _prepareForm()
     {
-        $tmplNote = '<p class="note">%s</p>';
         $form = new Varien_Data_Form;
         $this->setForm($form);
 
@@ -60,8 +59,8 @@ class Oggetto_Blog_Block_Adminhtml_Blog_Edit_Tab_General extends Mage_Adminhtml_
             'name'      => 'url_key',
             'label'     => Mage::helper('oggetto_blog')->__('URL Key'),
             'required'  => false,
-            'after_element_html' => sprintf($tmplNote,
-                Mage::helper('oggetto_blog')->__('Leave empty for automatic generation'))
+            'note'      => Mage::helper('oggetto_blog')
+                ->__('Leave empty for automatic generation (only latin characters)'),
         ));
 
         $fieldset->addField('shor_desciption', 'textarea', array(
@@ -82,8 +81,9 @@ class Oggetto_Blog_Block_Adminhtml_Blog_Edit_Tab_General extends Mage_Adminhtml_
             'required'  => false,
         ));
 
-        if (Mage::registry('oggetto_blog_post')) {
-            $form->setValues(Mage::registry('oggetto_blog_post')->getData());
+        $post = Mage::registry(Oggetto_Blog_Model_Post::REGISTRY_KEY);
+        if ($post) {
+            $form->setValues($post->getData());
         }
 
         return parent::_prepareForm();

@@ -26,7 +26,7 @@
 <layout  version="0.1.0">
     <adminhtml_blog_index>
         <reference name="content">
-            <block type="oggetto_blog/adminhtml_blog" name="blog">
+            <block type="oggetto_blog/adminhtml_blog" name="adminhtml.oggetto.blog" as="adminhtml_oggetto_blog" template="oggetto_blog/blog.phtml">
                 <block type="adminhtml/store_switcher" name="store_switcher"/>
             </block>
         </reference>

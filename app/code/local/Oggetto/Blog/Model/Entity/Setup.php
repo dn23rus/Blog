@@ -160,14 +160,14 @@ class Oggetto_Blog_Model_Entity_Setup extends Mage_Eav_Model_Entity_Setup
             $tables[$this->getTable($eavTableName)] = $eavTable;
         }
 
-        //$connection->beginTransaction();
+        $connection->beginTransaction();
         try {
             foreach ($tables as $tableName => $table) {
                 $connection->createTable($table);
             }
-            //$connection->commit();
+            $connection->commit();
         } catch (Exception $e) {
-            //$connection->rollBack();
+            $connection->rollBack();
             Mage::logException($e);
             throw Mage::exception('Mage_Eav', Mage::helper('eav')->__('Can\'t create table: %s', $tableName));
         }

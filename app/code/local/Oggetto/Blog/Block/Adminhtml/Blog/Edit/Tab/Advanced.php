@@ -60,6 +60,11 @@ class Oggetto_Blog_Block_Adminhtml_Blog_Edit_Tab_Advanced extends Mage_Adminhtml
             'required'  => false,
         ));
 
+        $post = Mage::registry(Oggetto_Blog_Model_Post::REGISTRY_KEY);
+        if ($post) {
+            $form->setValues($post->getData());
+        }
+
         return parent::_prepareForm();
     }
 }

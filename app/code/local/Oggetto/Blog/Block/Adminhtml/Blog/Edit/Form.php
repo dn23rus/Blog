@@ -43,7 +43,7 @@ class Oggetto_Blog_Block_Adminhtml_Blog_Edit_Form extends Mage_Adminhtml_Block_W
     {
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
-            'action'    => Mage::getUrl('*/*/save', array('id' => $this->getRequest()->getParam('id'))),
+            'action'    => Mage::getUrl('*/*/savePost', array('id' => $this->getRequest()->getParam('id'))),
             'method'    => 'post',
             'enctype'   => 'multipart/form-data',
         ));

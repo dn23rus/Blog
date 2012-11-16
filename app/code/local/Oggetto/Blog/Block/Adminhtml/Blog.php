@@ -41,12 +41,11 @@ class Oggetto_Blog_Block_Adminhtml_Blog extends Mage_Adminhtml_Block_Widget_Grid
      */
     public function __construct()
     {
-        $this->_controller = 'adminhtml_blog';
-        $this->_blockGroup = 'oggetto_blog';
-        $this->_headerText = Mage::helper('oggetto_blog')->__('Blog Manager');
+        $this->_controller     = 'adminhtml_blog';
+        $this->_blockGroup     = 'oggetto_blog';
+        $this->_headerText     = Mage::helper('oggetto_blog')->__('Blog Manager');
         $this->_addButtonLabel = Mage::helper('oggetto_blog')->__('Add Post');
         parent::__construct();
-        $this->setTemplate('oggetto_blog/blog.phtml');
     }
 
     /**
@@ -57,7 +56,7 @@ class Oggetto_Blog_Block_Adminhtml_Blog extends Mage_Adminhtml_Block_Widget_Grid
     public function isSingleStoreMode()
     {
         if (!Mage::app()->isSingleStoreMode()) {
-               return false;
+            return false;
         }
         return true;
     }
