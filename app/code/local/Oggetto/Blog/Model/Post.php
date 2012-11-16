@@ -35,6 +35,7 @@ class Oggetto_Blog_Model_Post extends Mage_Core_Model_Abstract
 {
 
     const ENTITY                = 'oggetto_blog_post';
+    const REGISTRY_KEY          = 'oggetto_blog_post_registry_key';
 
     protected $_eventPrefix     = 'oggetto_blog_post';
     protected $_eventObject     = 'post';
@@ -54,16 +55,17 @@ class Oggetto_Blog_Model_Post extends Mage_Core_Model_Abstract
     /**
      * Returns formated string
      *
-     * @param string $string string
+     * @param string $string    string
+     * @param string $delemiter delemiter
      * @return string
      */
-    public function generateUrlKey($string = null)
+    public function generateUrlKey($string = null, $delemiter = '-')
     {
         if (!$string) {
             $string = $this->getTitle();
         }
-        $string = preg_replace('#[^a-z0-9-]#', '-', trim(strtolower($string)));
-        $string = preg_replace('#-{2,}#', '-', $string);
+        $string = preg_replace('#[^a-z0-9-]#', $delemiter, trim(strtolower($string)));
+        $string = preg_replace('#-{2,}#', $delemiter, $string);
         return $string;
     }
 
@@ -74,10 +76,36 @@ class Oggetto_Blog_Model_Post extends Mage_Core_Model_Abstract
      */
     public function getCategoryIds()
     {
-        $categoryIds = $this->getCategoryIds();
+        $categoryIds = $this->getData('category_ids');
         if ($categoryIds) {
             return explode(',', $categoryIds);
         }
         return array();
+    }
+
+    /**
+     * Load by url key
+     *
+     * @param string $key url key
+     * @return Oggetto_Blog_Model_Post
+     */
+    public function loadByUrlKey($key)
+    {
+        $this->load($key, 'url_key');
+        return $this;
+    }
+
+    /**
+     * Validation
+     *
+     * @return Oggetto_Blog_Model_Post
+     * @throws Mage_Core_Exception
+     */
+    public function validate()
+    {
+        /**
+         * @todo add validateion code
+         */
+        return $this;
     }
 }

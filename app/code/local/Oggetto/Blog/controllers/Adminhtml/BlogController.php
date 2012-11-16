@@ -72,46 +72,58 @@ class Oggetto_Blog_Adminhtml_BlogController extends Mage_Adminhtml_Controller_Ac
                 Mage::helper('oggetto_blog')->__('Blog Manager'),
                 Mage::helper('oggetto_blog')->__('Blog Manager'));
 
+
         if ($id = $this->getRequest()->getParam('id')) {
-            $postModel = Mage::getModel('oggetto_blog/post')->load($id);
-            Mage::register('oggetto_blog_post', $postModel);
+            Mage::register(Oggetto_Blog_Model_Post::REGISTRY_KEY, Mage::getModel('oggetto_blog/post')->load($id));
         }
 
         $this->renderLayout();
     }
 
     /**
-     * Save action
+     * SavePost action
      *
      * @return void
      */
-    public function saveAction()
+    public function savePostAction()
     {
         if (!$this->getRequest()->isPost()) {
             return;
         }
 
-        try {
-            $postModel = Mage::getModel('oggetto_blog/post');
-            $data = $this->getRequest()->getPost();
+        $id        = $this->getRequest()->getParam('id');
+        $data      = $this->getRequest()->getPost();
+        $postModel = Mage::getModel('oggetto_blog/post');
 
-            $id = $this->getRequest()->getParam('id');
+        try {
+            $date = now();
             if ($id > 0) {
-                $postModel->setId($id);
+                $postModel->load($id);
             } else {
-                $postModel->setCreatedAt(now());
+                $postModel->setCreatedAt($date);
             }
 
+            $postModel->setUpdatedAt($date);
+            $postModel->addData($data);
+
+            if (empty($data['url_key'])) {
+                $postModel->setUrlKey($postModel->generateUrlKey());
+            }
+
+            $postModel->validate()->save();
+
             Mage::getSingleton('adminhtml/session')
-                ->addSuccess(Mage::helper('oggetto_blog')->__('Post was successfully saved'));
+                ->addSuccess(Mage::helper('oggetto_blog')->__('Post was successfully saved.'));
 
-            $this->_redirect('*/*/');
-        } catch (Exception $e) {
+            return $this->_redirect('*/*/');
+        } catch (Mage_Core_Exception $e) {
             Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-            Mage::getSingleton('adminhtml/session')->setData('oggetto_blog_post', $postModel);
-
-            $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
+        } catch (Exception $e) {
+            Mage::logException($e);
+            Mage::getSingleton('adminhtml/session')
+                ->addError(Mage::helper('oggetto_blog')->__('Something went wrong while saving post.'));
         }
+        $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
     }
 
     /**
@@ -121,40 +133,12 @@ class Oggetto_Blog_Adminhtml_BlogController extends Mage_Adminhtml_Controller_Ac
      */
     public function categoriesJsonAction()
     {
-        Mage::register('current_oggetto_blog_post',
-            Mage::getModel('oggetto_blog/post')->load($this->getRequest()->getParam('id')));
-
-        $this->getResponse()->setBody(
-            $this->getLayout()->createBlock('oggetto_blog/adminhtml_blog_edit_tab_category')
-                ->getCategoryChildrenJson($this->getRequest()->getParam('category'))
-        );
-    }
-
-    /**
-     * Save object
-     *
-     * @param Varien_Object $object object
-     * @param array         $data   data
-     * @return void
-     */
-    protected function _save($object, $data)
-    {
-        $id = $this->getRequest()->getParam('id');
-        $object->setId($id);
-
-        if (!$id) {
-            $object->setCreatedAt(now());
+        if (!Mage::registry(Oggetto_Blog_Model_Post::REGISTRY_KEY)) {
+            Mage::register(Oggetto_Blog_Model_Post::REGISTRY_KEY, 
+                Mage::getModel('oggetto_blog/post')->load($this->getRequest()->getParam('id')));
         }
 
-        $object->setUpdatedAt(now());
-
-        $object->setData($data);
-        if (!isset($data['url_key']) || empty($data['url_key'])) {
-            $object->setUrlKey($object->generateUrlKey());
-        }
-
-        Zend_Debug::dump($object);die;
-
-        $object->save();
+        $this->getResponse()->setBody($this->getLayout()->createBlock('oggetto_blog/adminhtml_blog_edit_tab_category')
+                ->getCategoryChildrenJson($this->getRequest()->getParam('category')));
     }
 }

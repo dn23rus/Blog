@@ -31,7 +31,7 @@
  * @subpackage Model
  * @author     Dmitry Buryak <b.dmitry@oggettoweb.com>
  */
-class Oggetto_Blog_Model_Resource_Setup extends Mage_Eav_Model_Entity_Setup
+class Oggetto_Blog_Model_Entity_Setup extends Mage_Eav_Model_Entity_Setup
 {
 
     /**
@@ -71,6 +71,9 @@ class Oggetto_Blog_Model_Resource_Setup extends Mage_Eav_Model_Entity_Setup
                 'nullable'  => false,
                 'default'   => '0',
             ), 'Store Id')
+            ->addColumn('url_key', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255, array(
+                'nullable'  => false,
+            ), 'Url Key')
             ->addColumn('created_at', Varien_Db_Ddl_Table::TYPE_TIMESTAMP, null, array(
                 'nullable'  => false,
             ), 'Created At')
@@ -85,6 +88,7 @@ class Oggetto_Blog_Model_Resource_Setup extends Mage_Eav_Model_Entity_Setup
 
             ->addIndex($this->getIdxName($baseTableName, array('entity_type_id')), array('entity_type_id'))
             ->addIndex($this->getIdxName($baseTableName, array('store_id')), array('store_id'))
+            ->addIndex($this->getIdxName($baseTableName, array('url_key')), array('url_key'))
 
             ->addForeignKey(
                 $this->getFkName($baseTableName, 'entity_type_id', 'eav/entity_type', 'entity_type_id'),
@@ -130,14 +134,10 @@ class Oggetto_Blog_Model_Resource_Setup extends Mage_Eav_Model_Entity_Setup
                     'nullable'  => false,
                     ), 'Attribute Value')
 
-                ->addIndex($this->getIdxName($eavTableName, array('entity_type_id')),
-                    array('entity_type_id'))
-                ->addIndex($this->getIdxName($eavTableName, array('attribute_id')),
-                    array('attribute_id'))
-                ->addIndex($this->getIdxName($eavTableName, array('store_id')),
-                    array('store_id'))
-                ->addIndex($this->getIdxName($eavTableName, array('entity_id')),
-                    array('entity_id'))
+                ->addIndex($this->getIdxName($eavTableName, array('entity_type_id')),array('entity_type_id'))
+                ->addIndex($this->getIdxName($eavTableName, array('attribute_id')),array('attribute_id'))
+                ->addIndex($this->getIdxName($eavTableName, array('store_id')),array('store_id'))
+                ->addIndex($this->getIdxName($eavTableName, array('entity_id')),array('entity_id'))
 
                 ->addForeignKey($this->getFkName($eavTableName, 'entity_id', $baseTableName, 'entity_id'),
                     'entity_id', $this->getTable($baseTableName), 'entity_id',
@@ -156,14 +156,14 @@ class Oggetto_Blog_Model_Resource_Setup extends Mage_Eav_Model_Entity_Setup
             $tables[$this->getTable($eavTableName)] = $eavTable;
         }
 
-        //$connection->beginTransaction();
+        $connection->beginTransaction();
         try {
             foreach ($tables as $tableName => $table) {
                 $connection->createTable($table);
             }
-            //$connection->commit();
+            $connection->commit();
         } catch (Exception $e) {
-            //$connection->rollBack();
+            $connection->rollBack();
             Mage::logException($e);
             throw Mage::exception('Mage_Eav', Mage::helper('eav')->__('Can\'t create table: %s', $tableName));
         }

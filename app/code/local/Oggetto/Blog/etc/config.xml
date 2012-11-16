@@ -26,7 +26,7 @@
 <config>
     <modules>
         <Oggetto_Blog>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </Oggetto_Blog>
     </modules>
 
@@ -42,6 +42,9 @@
                     <post>
                         <table>oggetto_blog_post_entity</table>
                     </post>
+                    <post_index>
+                        <table>oggetto_blog_post_index</table>
+                    </post_index>
                 </entities>
             </oggetto_blog_resource>
         </models>
@@ -59,7 +62,7 @@
             <oggetto_blog_setup>
                 <setup>
                     <module>Oggetto_Blog</module>
-                    <class>Oggetto_Blog_Model_Resource_Setup</class>
+                    <class>Oggetto_Blog_Model_Entity_Setup</class>
                 </setup>
             </oggetto_blog_setup>
             <oggetto_blog_read>
@@ -73,6 +76,13 @@
                 </conection>
             </oggetto_blog_write>
         </resources>
+        <index>
+            <indexer>
+                <oggetto_blog>
+                    <model>oggetto_blog/indexer_post</model>
+                </oggetto_blog>
+            </indexer>
+        </index>
     </global>
 
     <frontend>

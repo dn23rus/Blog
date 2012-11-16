@@ -57,10 +57,13 @@ class Oggetto_Blog_Model_Resource_Post extends Mage_Eav_Model_Entity_Abstract
     protected function _getDefaultAttributes()
     {
         return array(
+            'entity_id',
             'entity_type_id',
+            'store_id',
+            'url_key',
             'created_at',
             'updated_at',
-            'status',
+            'is_active',
         );
     }
 }

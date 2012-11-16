@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Oggetto Blog extension for Magento
+ * Oggetto Block extension for Magento
  *
  * NOTICE OF LICENSE
  *
@@ -13,25 +13,34 @@
  * DISCLAIMER
  *
  * Do not edit or add to this file if you wish to upgrade
- * the Oggetto Blog module to newer versions in the future.
- * If you wish to customize the Oggetto Blog module for your needs
+ * the Oggetto Block module to newer versions in the future.
+ * If you wish to customize the Oggetto Block module for your needs
  * please refer to http://www.magentocommerce.com for more information.
  *
  * @category   Oggetto
- * @package    Oggetto_Blog
+ * @package    Oggetto_Block
  * @copyright  Copyright (C) 2012 Oggetto Web (http://oggettoweb.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Default helper
+ * AttributeController
  *
  * @category   Oggetto
- * @package    Oggetto_Blog
- * @subpackage Helper
+ * @package    Oggetto_Block
+ * @subpackage controller
  * @author     Dmitry Buryak <b.dmitry@oggettoweb.com>
  */
-class Oggetto_Blog_Helper_Data extends Mage_Core_Helper_Abstract
+class Oggetto_Blog_Adminhtml_AttributeController extends Mage_Adminhtml_Controller_Action
 {
-    
+
+    /**
+     * Index action
+     *
+     * @return void
+     */
+    public function indexAction()
+    {
+        die('1');
+    }
 }

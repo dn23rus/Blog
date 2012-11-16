@@ -56,7 +56,12 @@ class Oggetto_Blog_Block_Adminhtml_Blog_Grid extends Mage_Adminhtml_Block_Widget
      */
     protected function _prepareCollection()
     {
-        $collection = Mage::getModel('oggetto_blog/post')->getCollection();
+        $collection = Mage::getModel('oggetto_blog/post')->getCollection()
+            ->addAttributeToSelect('title')
+            ->addAttributeToSelect('short_description')
+            ->addAttributeToSelect('author')
+            ;
+
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
