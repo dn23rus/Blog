@@ -34,6 +34,8 @@
 class Oggetto_Blog_Model_Resource_Indexer_Post extends Mage_Index_Model_Resource_Abstract
 {
 
+    protected $_bindLimit = 100;
+
     /**
      * Resouce initialization
      *
@@ -47,12 +49,76 @@ class Oggetto_Blog_Model_Resource_Indexer_Post extends Mage_Index_Model_Resource
     /**
      * Reindex entities
      *
-     * @param array $entityId entity id(s)
+     * @param array $entityIds entity id(s)
      * @return void
      */
-    protected function _reindexEntity($entityId = null)
+    protected function _reindexEntity($entityIds = null)
     {
+        $stores = Mage::app()->getStores();
 
+        foreach ($stores as $store) {
+
+            $postCollection = $this->_getPostCollection($entityIds, $store);
+            $rowsCount      = 0;
+            $bind           = array();
+
+            foreach ($postCollection as $post) {
+                $bind[] = $this->_getBindRow($post);
+                $rowsCount ++;
+                if ($rowsCount >= $this->_bindLimit) {
+                    $this->_getWriteAdapter()->insertMultiple($this->getMainTable(), $bind);
+                    $rowsCount = 0;
+                    $bind = array();
+                }
+            }
+        }
+    }
+
+    /**
+     * Post bind
+     *
+     * @param Oggetto_Blog_Mode_Post $post post model
+     * @return void
+     */
+    protected function _getBindRow(Oggetto_Blog_Mode_Post $post)
+    {
+        return array(
+            'entity_id'         => (int) $post->getId(),
+            'store_id'          => (int) $post->getStoreId(),
+            'url_key'           => $post->getUrlKey(),
+            'title'             => $post->getTitle(),
+            'short_description' => $post->getShortDescription(),
+            'content'           => $post->getContent(),
+            'author'            => $post->getAuthor(),
+            'meta_keywords'     => $post->getMetaKeywords(),
+            'meta_description'  => $post->getMetaDescription(),
+            'category_ids'      => $post->getCategoryIds(),
+        );
+    }
+
+    /**
+     * Posts colleciton
+     *
+     * @param array                 $entityIds entity id(s)
+     * @param Mage_Core_Model_Store $store     store
+     * @return Oggetto_Blog_Model_Resource_Post_Collection
+     */
+    protected function _getPostCollection($entityIds, $store)
+    {
+        $postCollection = Mage::getModel('oggetto_blog/post')->getCollection();
+        $postCollection->addAttributeToSelect('title');
+        $postCollection->addAttributeToSelect('short_description');
+        $postCollection->addAttributeToSelect('content');
+        $postCollection->addAttributeToSelect('author');
+        $postCollection->addAttributeToSelect('meta_keywords');
+        $postCollection->addAttributeToSelect('meta_description');
+        $postCollection->addAttributeToSelect('category_ids');
+        if (!empty($entityId)) {
+            $postCollection->addFieldToFilter('entity_id', array('in' => $entityId));
+        }
+        $postCollection->addStoreFilter($store);
+
+        return $postCollection;
     }
 
     /**

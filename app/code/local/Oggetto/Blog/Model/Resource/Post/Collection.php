@@ -54,4 +54,25 @@ class Oggetto_Blog_Model_Resource_Post_Collection extends Mage_Eav_Model_Entity_
         $this->addFieldToFilter('is_active', array('eq' => Oggetto_Blog_Model_Attribute_Source_Status::ENABLED));
         return $this;
     }
+
+    /**
+     * Add store availability filter.
+     *
+     * @param mixed $store store
+     * @return Oggetto_Blog_Model_Resource_Post_Collection
+     */
+    public function addStoreFilter($store = null)
+    {
+        if ($store === null) {
+            $store = $this->getStoreId();
+        }
+        $store = Mage::app()->getStore($store);
+
+        if (!$store->isAdmin()) {
+            $this->setStoreId($store);
+            $this->addFieldToFilter('store_id', array('eq' => $store->getId()));
+        }
+
+        return $this;
+    }
 }

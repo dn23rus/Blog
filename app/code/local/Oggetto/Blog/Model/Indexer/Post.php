@@ -37,7 +37,8 @@ class Oggetto_Blog_Model_Indexer_Post extends Mage_Index_Model_Indexer_Abstract
     protected $_matchedEntities = array(
         Oggetto_Blog_Model_Post::ENTITY => array(
             Mage_Index_Model_Event::TYPE_SAVE,
-            Mage_Index_Model_Event::TYPE_MASS_ACTION
+            #Mage_Index_Model_Event::TYPE_DELETE, // deleting supports with foreign keys
+            Mage_Index_Model_Event::TYPE_MASS_ACTION,
         ),
     );
 
@@ -79,6 +80,10 @@ class Oggetto_Blog_Model_Indexer_Post extends Mage_Index_Model_Indexer_Abstract
      */
     protected function _registerEvent(Mage_Index_Model_Event $event)
     {
+        if (!$this->isVisible()) {
+            return;
+        }
+        
         $entity = $event->getDataObject();
         if ($entity->hasDataChanges()) {
             $event->setData('entity_id', $entity->getId());
@@ -93,8 +98,26 @@ class Oggetto_Blog_Model_Indexer_Post extends Mage_Index_Model_Indexer_Abstract
      */
     protected function _processEvent(Mage_Index_Model_Event $event)
     {
+        if (!$this->isVisible()) {
+            return;
+        }
+
         if ($event->getData('entity_id')) {
             $this->callEventHandler($event);
         }
+    }
+
+    /**
+     * Whether the indexer should be displayed on process/list page
+     *
+     * @return bool
+     */
+    public function isVisible()
+    {
+        /**
+         * @todo implement config path
+         */
+        #return Mage::getStoreConfigFlag('config path...');
+        return true;
     }
 }
