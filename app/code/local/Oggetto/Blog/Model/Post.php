@@ -57,13 +57,13 @@ class Oggetto_Blog_Model_Post extends Mage_Core_Model_Abstract
      * @param string $string string
      * @return string
      */
-    public function generateUrlKey($string = null)
+    public function generateUrlKey($string = null, $delemiter = '-')
     {
         if (!$string) {
             $string = $this->getTitle();
         }
-        $string = preg_replace('#[^a-z0-9-]#', '-', trim(strtolower($string)));
-        $string = preg_replace('#-{2,}#', '-', $string);
+        $string = preg_replace('#[^a-z0-9-]#', $delemiter, trim(strtolower($string)));
+        $string = preg_replace('#-{2,}#', $delemiter, $string);
         return $string;
     }
 
@@ -79,5 +79,16 @@ class Oggetto_Blog_Model_Post extends Mage_Core_Model_Abstract
             return explode(',', $categoryIds);
         }
         return array();
+    }
+
+    /**
+     * Load by url key
+     *
+     * @return Oggetto_Blog_Model_Post
+     */
+    public function loadByUrlKey($key)
+    {
+        $this->load($key, 'url_key');
+        return $this;
     }
 }

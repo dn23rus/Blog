@@ -39,6 +39,11 @@
                     <sort_order>10</sort_order>
                     <action>adminhtml/blog/new</action>
                 </new_post>
+                <manage_attributes translate="title">
+                    <title>Manage Attributes</title>
+                    <sort_order>30</sort_order>
+                    <action>adminhtml/attribute/index</action>
+                </manage_attributes>
             </children>
         </oggetto_blog>
     </menu>

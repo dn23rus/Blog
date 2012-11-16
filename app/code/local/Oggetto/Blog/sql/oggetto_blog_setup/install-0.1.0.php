@@ -51,20 +51,6 @@ $installer->addAttribute($entity, 'title', array(
     'unique'                    => false,
 ));
 
-$installer->addAttribute($entity, 'url_key', array(
-    'type'                      => 'varchar',
-    'label'                     => 'URL Key',
-    'input'                     => 'text',
-    'class'                     => '',
-    'backend'                   => '',
-    'frontend'                  => '',
-    'source'                    => '',
-    'required'                  => false,
-    'user_defined'              => true,
-    'default'                   => '',
-    'unique'                    => true,
-));
-
 $installer->addAttribute($entity, 'short_description', array(
     'type'                      => 'text',
     'label'                     => 'Short Description',

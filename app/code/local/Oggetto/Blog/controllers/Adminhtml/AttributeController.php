@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Oggetto Blog extension for Magento
+ * Oggetto Block extension for Magento
  *
  * NOTICE OF LICENSE
  *
@@ -13,45 +13,34 @@
  * DISCLAIMER
  *
  * Do not edit or add to this file if you wish to upgrade
- * the Oggetto Blog module to newer versions in the future.
- * If you wish to customize the Oggetto Blog module for your needs
+ * the Oggetto Block module to newer versions in the future.
+ * If you wish to customize the Oggetto Block module for your needs
  * please refer to http://www.magentocommerce.com for more information.
  *
  * @category   Oggetto
- * @package    Oggetto_Blog
+ * @package    Oggetto_Block
  * @copyright  Copyright (C) 2012 Oggetto Web (http://oggettoweb.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Blog
+ * AttributeController
  *
  * @category   Oggetto
- * @package    Oggetto_Blog
- * @subpackage Model
+ * @package    Oggetto_Block
+ * @subpackage controller
  * @author     Dmitry Buryak <b.dmitry@oggettoweb.com>
  */
-class Oggetto_Blog_Model_Resource_Post_Collection extends Mage_Eav_Model_Entity_Collection_Abstract
+class Oggetto_Blog_Adminhtml_AttributeController extends Mage_Adminhtml_Controller_Action
 {
 
     /**
-     * Constructor
+     * Index action
      *
      * @return void
      */
-    protected function _construct()
+    public function indexAction()
     {
-        $this->_init('oggetto_blog/post');
-    }
-
-    /**
-     * Active filter
-     *
-     * @return Oggetto_Blog_Model_Resource_Post_Collection
-     */
-    public function addIsActiveFilter()
-    {
-        $this->addFieldToFilter('is_active', array('eq' => Oggetto_Blog_Model_Attribute_Source_Status::ENABLED));
-        return $this;
+        die('1');
     }
 }
