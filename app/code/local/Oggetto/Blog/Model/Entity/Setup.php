@@ -134,14 +134,10 @@ class Oggetto_Blog_Model_Entity_Setup extends Mage_Eav_Model_Entity_Setup
                     'nullable'  => false,
                     ), 'Attribute Value')
 
-                ->addIndex($this->getIdxName($eavTableName, array('entity_type_id')),
-                    array('entity_type_id'))
-                ->addIndex($this->getIdxName($eavTableName, array('attribute_id')),
-                    array('attribute_id'))
-                ->addIndex($this->getIdxName($eavTableName, array('store_id')),
-                    array('store_id'))
-                ->addIndex($this->getIdxName($eavTableName, array('entity_id')),
-                    array('entity_id'))
+                ->addIndex($this->getIdxName($eavTableName, array('entity_type_id')),array('entity_type_id'))
+                ->addIndex($this->getIdxName($eavTableName, array('attribute_id')),array('attribute_id'))
+                ->addIndex($this->getIdxName($eavTableName, array('store_id')),array('store_id'))
+                ->addIndex($this->getIdxName($eavTableName, array('entity_id')),array('entity_id'))
 
                 ->addForeignKey($this->getFkName($eavTableName, 'entity_id', $baseTableName, 'entity_id'),
                     'entity_id', $this->getTable($baseTableName), 'entity_id',
