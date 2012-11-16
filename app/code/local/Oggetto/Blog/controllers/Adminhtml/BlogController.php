@@ -115,7 +115,7 @@ class Oggetto_Blog_Adminhtml_BlogController extends Mage_Adminhtml_Controller_Ac
             Mage::getSingleton('adminhtml/session')
                 ->addSuccess(Mage::helper('oggetto_blog')->__('Post was successfully saved.'));
 
-            $this->_redirect('*/*/');
+            return $this->_redirect('*/*/');
         } catch (Mage_Core_Exception $e) {
             Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
         } catch (Exception $e) {
