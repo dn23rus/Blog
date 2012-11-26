@@ -83,7 +83,7 @@ class Oggetto_Blog_Model_Indexer_Post extends Mage_Index_Model_Indexer_Abstract
         if (!$this->isVisible()) {
             return;
         }
-        
+
         $entity = $event->getDataObject();
         if ($entity->hasDataChanges()) {
             $event->setData('entity_id', $entity->getId());

@@ -125,4 +125,11 @@
         </routers>
     </admin>
 
+    <phpunit>
+        <suite>
+            <modules>
+                <Oggetto_Blog />
+            </modules>
+        </suite>
+    </phpunit>
 </config>
