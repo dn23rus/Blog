@@ -25,27 +25,31 @@
 -->
 <config>
     <menu>
-        <oggetto_blog module="oggetto_blog" translate="title">
-            <title>Oggetto Blog</title>
-            <sort_order>70</sort_order>
+        <cms>
             <children>
-                <posts translate="title">
-                    <title>Manage Posts</title>
-                    <sort_order>20</sort_order>
-                    <action>adminhtml/blog</action>
-                </posts>
-                <new_post translate="title">
-                    <title>Add Post</title>
+                <oggetto_blog module="oggetto_blog" translate="title">
+                    <title>Blog</title>
                     <sort_order>10</sort_order>
-                    <action>adminhtml/blog/new</action>
-                </new_post>
-                <manage_attributes translate="title">
-                    <title>Manage Attributes</title>
-                    <sort_order>30</sort_order>
-                    <action>adminhtml/attribute/index</action>
-                </manage_attributes>
+                    <children>
+                        <new_post translate="title">
+                            <title>Add Post</title>
+                            <sort_order>10</sort_order>
+                            <action>adminhtml/blog/new</action>
+                        </new_post>
+                        <posts translate="title">
+                            <title>Manage Posts</title>
+                            <sort_order>20</sort_order>
+                            <action>adminhtml/blog</action>
+                        </posts>
+                        <manage_attributes translate="title">
+                            <title>Manage Attributes</title>
+                            <sort_order>30</sort_order>
+                            <action>adminhtml/attribute/index</action>
+                        </manage_attributes>
+                    </children>
+                </oggetto_blog>
             </children>
-        </oggetto_blog>
+        </cms>
     </menu>
     <acl>
         <resources>
@@ -54,10 +58,27 @@
             </all>
             <admin>
                 <children>
-                    <Oggetto_Blog translate="title">
-                        <title>Oggetto Blog Module</title>
-                        <sort_order>70</sort_order>
-                    </Oggetto_Blog>
+                    <cms>
+                        <children>
+                            <Oggetto_Blog translate="title">
+                                <title>Blog Module</title>
+                                <children>
+                                    <new_post translate="title">
+                                        <title>Add Post</title>
+                                        <sort_order>10</sort_order>
+                                    </new_post>
+                                    <posts translate="title">
+                                        <title>Manage Posts</title>
+                                        <sort_order>20</sort_order>
+                                    </posts>
+                                    <manage_attributes translate="title">
+                                        <title>Manage Attributes</title>
+                                        <sort_order>30</sort_order>
+                                    </manage_attributes>
+                                </children>
+                            </Oggetto_Blog>
+                        </children>
+                    </cms>
                 </children>
             </admin>
         </resources>
