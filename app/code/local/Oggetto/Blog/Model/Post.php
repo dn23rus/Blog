@@ -40,7 +40,6 @@ class Oggetto_Blog_Model_Post extends Mage_Core_Model_Abstract
     protected $_eventPrefix     = 'oggetto_blog_post';
     protected $_eventObject     = 'post';
 
-
     /**
      * Resource initialization
      *
