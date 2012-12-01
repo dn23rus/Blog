@@ -39,8 +39,7 @@ class Oggetto_Blog_Model_Entity_Setup extends Mage_Eav_Model_Entity_Setup
      *
      * @param string $baseTableName base table name
      * @param array  $options       additional option
-     * @return \Oggetto_Blog_Model_Resource_Setup
-     * @throws Mage_Eav_Exception
+     * @return Oggetto_Blog_Model_Entity_Setup
      */
     public function createEntityTables($baseTableName, array $options = array())
     {
@@ -134,40 +133,145 @@ class Oggetto_Blog_Model_Entity_Setup extends Mage_Eav_Model_Entity_Setup
                     'nullable'  => false,
                     ), 'Attribute Value')
 
-                ->addIndex($this->getIdxName($eavTableName, array('entity_type_id')),array('entity_type_id'))
-                ->addIndex($this->getIdxName($eavTableName, array('attribute_id')),array('attribute_id'))
-                ->addIndex($this->getIdxName($eavTableName, array('store_id')),array('store_id'))
-                ->addIndex($this->getIdxName($eavTableName, array('entity_id')),array('entity_id'))
+                ->addIndex($this->getIdxName($eavTableName,
+                        array('entity_id', 'attribute_id', 'store_id'), Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE),
+                    array('entity_id', 'attribute_id', 'store_id'),
+                    array('type' => Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE)
+                )
+                ->addIndex($this->getIdxName($eavTableName, array('entity_type_id')), array('entity_type_id'))
+                ->addIndex($this->getIdxName($eavTableName, array('attribute_id')), array('attribute_id'))
+                ->addIndex($this->getIdxName($eavTableName, array('store_id')), array('store_id'))
+                ->addIndex($this->getIdxName($eavTableName, array('entity_id')), array('entity_id'))
 
                 ->addForeignKey($this->getFkName($eavTableName, 'entity_id', $baseTableName, 'entity_id'),
                     'entity_id', $this->getTable($baseTableName), 'entity_id',
                     Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
 
-                ->addForeignKey($this->getFkName($eavTableName, 'entity_type_id', 'eav/entity_type', 'entity_type_id'),
-                    'entity_type_id', $this->getTable('eav/entity_type'), 'entity_type_id',
+                ->addForeignKey($this->getFkName($eavTableName, 'attribute_id', 'eav/attribute', 'attribute_id'),
+                    'attribute_id', $this->getTable('eav/attribute'), 'attribute_id',
                     Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
 
                 ->addForeignKey($this->getFkName($eavTableName, 'store_id', 'core/store', 'store_id'),
                     'store_id', $this->getTable('core/store'), 'store_id',
                     Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
 
-                ->setComment('Eav Entity Value Table');
+                ->setComment('Oggetto Blog Eav Entity Value Table');
 
             $tables[$this->getTable($eavTableName)] = $eavTable;
         }
 
-        $connection->beginTransaction();
-        try {
-            foreach ($tables as $tableName => $table) {
-                $connection->createTable($table);
-            }
-            $connection->commit();
-        } catch (Exception $e) {
-            $connection->rollBack();
-            Mage::logException($e);
-            throw Mage::exception('Mage_Eav', Mage::helper('eav')->__('Can\'t create table: %s', $tableName));
+        foreach ($tables as $tableName => $table) {
+            $connection->createTable($table);
         }
 
         return $this;
+    }
+
+    /**
+     * Default entities
+     *
+     * @return array
+     */
+    public function getDefaultEntities()
+    {
+        return array(
+            Oggetto_Blog_Model_Post::ENTITY => array(
+                'entity_model'  => 'oggetto_blog/post',
+                'table'         => 'oggetto_blog/post',
+                'attributes'    => array(
+                    'title'             => array(
+                        'type'          => 'varchar',
+                        'label'         => 'Title',
+                        'input'         => 'text',
+                        'class'         => '',
+                        'backend'       => '',
+                        'frontend'      => '',
+                        'source'        => '',
+                        'required'      => true,
+                        'user_defined'  => true,
+                        'default'       => '',
+                        'unique'        => false,
+                    ),
+                    'short_description' => array(
+                        'type'          => 'text',
+                        'label'         => 'Short Description',
+                        'input'         => 'textarea',
+                        'class'         => '',
+                        'backend'       => '',
+                        'frontend'      => '',
+                        'source'        => '',
+                        'required'      => false,
+                        'user_defined'  => true,
+                        'default'       => '',
+                        'unique'        => false,
+                    ),
+                    'content'           => array(
+                        'type'          => 'text',
+                        'label'         => 'Content',
+                        'input'         => 'textarea',
+                        'class'         => '',
+                        'backend'       => '',
+                        'frontend'      => '',
+                        'source'        => '',
+                        'required'      => true,
+                        'user_defined'  => true,
+                        'default'       => '',
+                        'unique'        => false,
+                    ),
+                    'meta_keywords'     => array(
+                        'type'          => 'text',
+                        'label'         => 'Keywords',
+                        'input'         => 'textarea',
+                        'class'         => '',
+                        'backend'       => '',
+                        'frontend'      => '',
+                        'source'        => '',
+                        'required'      => false,
+                        'user_defined'  => true,
+                        'default'       => '',
+                        'unique'        => false,
+                    ),
+                    'meta_description'  => array(
+                        'type'          => 'text',
+                        'label'         => 'Description',
+                        'input'         => 'textarea',
+                        'class'         => '',
+                        'backend'       => '',
+                        'frontend'      => '',
+                        'source'        => '',
+                        'required'      => false,
+                        'user_defined'  => true,
+                        'default'       => '',
+                        'unique'        => false,
+                    ),
+                    'author'            => array(
+                        'type'          => 'varchar',
+                        'label'         => 'Author',
+                        'input'         => 'text',
+                        'class'         => '',
+                        'backend'       => '',
+                        'frontend'      => '',
+                        'source'        => '',
+                        'required'      => false,
+                        'user_defined'  => true,
+                        'default'       => '',
+                        'unique'        => true,
+                    ),
+                    'category_ids'      => array(
+                        'type'          => 'varchar',
+                        'label'         => 'Category Ids',
+                        'input'         => 'text',
+                        'class'         => '',
+                        'backend'       => '',
+                        'frontend'      => '',
+                        'source'        => '',
+                        'required'      => false,
+                        'user_defined'  => true,
+                        'default'       => '',
+                        'unique'        => false,
+                    ),
+                ),
+            ),
+        );
     }
 }

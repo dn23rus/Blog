@@ -21,53 +21,66 @@
  * @package    Oggetto_Blog
  * @copyright  Copyright (C) 2012 Oggetto Web (http://oggettoweb.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @author     Dmitry Buryak <b.dmitry@oggettoweb.com>
  */
 
-$installer = $this; /* @var $installer Oggetto_Blog_Model_Resource_Setup */
-// $installer = new Mage_Core_Model_Resource_Setup('core_setup');
+$installer  = $this; /* @var $installer Oggetto_Blog_Model_Resource_Setup */
+$connection = $installer->getConnection();
 
 $installer->startSetup();
 
-$table = $installer->getConnection()
-    ->newTable($installer->getTable('oggetto_blog/post_index'))
-    ->addColumn('entity_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 11, array(
-        'primary'  => true,
-        'unsigned' => true,
-        'nullable' => false,
-    ), 'Entity Id')
-    ->addColumn('store_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 11, array(
-        'primary'  => true,
-        'unsigned' => true,
-        'nullable' => false,
-    ), 'Store Id')
-    ->addColumn('url_key', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255, array(
-        'nullable' => false,
-    ), 'Url Key')
-    ->addColumn('title', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
-        'nullable' => false,
-    ), 'Title')
-    ->addColumn('short_description', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(), 'Short Description')
-    ->addColumn('content', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
-        'nullable' => false,
-    ), 'Content')
-    ->addColumn('author', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255, array(), 'Author')
-    ->addColumn('meta_keywords', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(), 'Meta Keywords')
-    ->addColumn('meta_description', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(), 'Meta Description')
-    ->addColumn('category_ids', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255, array(), 'Meta Description')
+try {
+    $connection->beginTransaction();
+    $table = $installer->getConnection()
+        ->newTable($installer->getTable('oggetto_blog/post_index'))
+        ->addColumn('entity_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 11, array(
+            'primary'  => true,
+            'unsigned' => true,
+            'nullable' => false,
+        ), 'Entity Id')
+        ->addColumn('store_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 11, array(
+            'primary'  => true,
+            'unsigned' => true,
+            'nullable' => false,
+        ), 'Store Id')
+        ->addColumn('url_key', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255, array(
+            'nullable' => false,
+        ), 'Url Key')
+        ->addColumn('title', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
+            'nullable' => false,
+        ), 'Title')
+        ->addColumn('short_description', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(), 'Short Description')
+        ->addColumn('content', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
+            'nullable' => false,
+        ), 'Content')
+        ->addColumn('author', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255, array(), 'Author')
+        ->addColumn('meta_keywords', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(), 'Meta Keywords')
+        ->addColumn('meta_description', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(), 'Meta Description')
+        ->addColumn('category_ids', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255, array(), 'Meta Description')
 
-    ->addIndex(
-        $installer->getIdxName($installer->getTable('oggetto_blog/post_index'), array('url_key')), array('url_key'))
+        ->addIndex(
+            $installer->getIdxName(
+                $installer->getTable('oggetto_blog/post_index'),
+                array('entity_id'), Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE
+            ), array('entity_id'), array('type' => Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE)
+        )
+        ->addIndex(
+            $installer->getIdxName($installer->getTable('oggetto_blog/post_index'), array('url_key')), array('url_key'))
 
-    ->addForeignKey($installer->getFkName('oggetto_blog/post_index', 'store_id', 'core/store', 'store_id'),
-        'store_id', $installer->getTable('core/store'), 'store_id',
-        Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
-    )
-    ->addForeignKey(
-        $installer->getFkName('oggetto_blog/post_index', 'entity_id', 'oggetto_blog/post', 'entity_id'),
-        'entity_id', $installer->getTable('oggetto_blog/post'), 'entity_id',
-        Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
-    );
+        ->addForeignKey($installer->getFkName('oggetto_blog/post_index', 'entity_id', 'oggetto_blog/post', 'entity_id'),
+            'entity_id', $installer->getTable('oggetto_blog/post'), 'entity_id',
+            Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
+        )
+        ->addForeignKey($installer->getFkName('oggetto_blog/post_index', 'store_id', 'core/store', 'store_id'),
+            'store_id', $installer->getTable('core/store'), 'store_id',
+            Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
+        );
 
-$installer->getConnection()->createTable($table);
+    $installer->getConnection()->createTable($table);
+    $connection->commit();
+} catch(Exception $e) {
+    Mage::logException($e);
+    $connection->rollBack();
+}
 
 $installer->endSetup();

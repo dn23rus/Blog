@@ -19,120 +19,28 @@
  *
  * @category   Oggetto
  * @package    Oggetto_Blog
- * @copyright  Copyright (C) 2011 Oggetto Web (http://oggettoweb.com)
+ * @copyright  Copyright (C) 2012 Oggetto Web (http://oggettoweb.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @author     Dmitry Buryak <b.dmitry@oggettoweb.com>
  */
 
-$installer = $this; /* @var $installer Oggetto_Blog_Model_Resource_Setup */
+$installer  = $this; /* @var $installer Oggetto_Blog_Model_Resource_Setup */
+$connection = $installer->getConnection();
 
 $installer->startSetup();
 
-$entity = Oggetto_Blog_Model_Post::ENTITY;
-
-$installer->addEntityType($entity, array(
-    'entity_model'  => 'oggetto_blog/post',
-    'table'         => 'oggetto_blog/post',
-));
-
-$installer->createEntityTables($this->getTable('oggetto_blog/post'));
-
-$installer->addAttribute($entity, 'title', array(
-    'type'                      => 'varchar',
-    'label'                     => 'Title',
-    'input'                     => 'text',
-    'class'                     => '',
-    'backend'                   => '',
-    'frontend'                  => '',
-    'source'                    => '',
-    'required'                  => true,
-    'user_defined'              => true,
-    'default'                   => '',
-    'unique'                    => false,
-));
-
-$installer->addAttribute($entity, 'short_description', array(
-    'type'                      => 'text',
-    'label'                     => 'Short Description',
-    'input'                     => 'textarea',
-    'class'                     => '',
-    'backend'                   => '',
-    'frontend'                  => '',
-    'source'                    => '',
-    'required'                  => false,
-    'user_defined'              => true,
-    'default'                   => '',
-    'unique'                    => false,
-));
-
-$installer->addAttribute($entity, 'content', array(
-    'type'                      => 'text',
-    'label'                     => 'Content',
-    'input'                     => 'textarea',
-    'class'                     => '',
-    'backend'                   => '',
-    'frontend'                  => '',
-    'source'                    => '',
-    'required'                  => true,
-    'user_defined'              => true,
-    'default'                   => '',
-    'unique'                    => false,
-));
-
-$installer->addAttribute($entity, 'meta_keywords', array(
-    'type'                      => 'text',
-    'label'                     => 'Keywords',
-    'input'                     => 'textarea',
-    'class'                     => '',
-    'backend'                   => '',
-    'frontend'                  => '',
-    'source'                    => '',
-    'required'                  => false,
-    'user_defined'              => true,
-    'default'                   => '',
-    'unique'                    => false,
-));
-
-$installer->addAttribute($entity, 'meta_description', array(
-    'type'                      => 'text',
-    'label'                     => 'Description',
-    'input'                     => 'textarea',
-    'class'                     => '',
-    'backend'                   => '',
-    'frontend'                  => '',
-    'source'                    => '',
-    'required'                  => false,
-    'user_defined'              => true,
-    'default'                   => '',
-    'unique'                    => false,
-));
-
-$installer->addAttribute($entity, 'author', array(
-    'type'                      => 'varchar',
-    'label'                     => 'Author',
-    'input'                     => 'text',
-    'class'                     => '',
-    'backend'                   => '',
-    'frontend'                  => '',
-    'source'                    => '',
-    'required'                  => false,
-    'user_defined'              => true,
-    'default'                   => '',
-    'unique'                    => true,
-));
-
-$installer->addAttribute($entity, 'category_ids', array(
-    'type'                      => 'varchar',
-    'label'                     => 'Category Ids',
-    'input'                     => 'text',
-    'class'                     => '',
-    'backend'                   => '',
-    'frontend'                  => '',
-    'source'                    => '',
-    'required'                  => false,
-    'user_defined'              => true,
-    'default'                   => '',
-    'unique'                    => false,
-));
+try {
+    $connection->beginTransaction();
+    $installer->addEntityType(Oggetto_Blog_Model_Post::ENTITY, array(
+        'entity_model'  => 'oggetto_blog/post',
+        'table'         => 'oggetto_blog/post',
+    ));
+    $installer->createEntityTables($this->getTable('oggetto_blog/post'));
+    $installer->installEntities();
+    $connection->commit();
+} catch (Exception $e) {
+    Mage::logException($e);
+    $connection->rollBack();
+}
 
 $installer->endSetup();
