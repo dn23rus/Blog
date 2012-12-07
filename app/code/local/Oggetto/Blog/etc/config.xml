@@ -83,6 +83,16 @@
                 </oggetto_blog>
             </indexer>
         </index>
+        <events>
+            <controller_front_init_before>
+                <observers>
+                    <oggetto_blog_add_router>
+                        <class>Oggetto_Blog_Controller_Router</class>
+                        <method>initControllerRouters</method>
+                    </oggetto_blog_add_router>
+                </observers>
+            </controller_front_init_before>
+        </events>
     </global>
 
     <frontend>
@@ -91,7 +101,7 @@
                 <use>standard</use>
                 <args>
                     <module>Oggetto_Blog</module>
-                    <frontName>oggetto_blog</frontName>
+                    <frontName>blog</frontName>
                 </args>
             </oggetto_blog>
         </routers>
@@ -103,7 +113,6 @@
             </updates>
         </layout>
     </frontend>
-
     <adminhtml>
         <layout>
             <updates>
@@ -124,7 +133,6 @@
             </adminhtml>
         </routers>
     </admin>
-
     <phpunit>
         <suite>
             <modules>
